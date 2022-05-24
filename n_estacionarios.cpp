@@ -2,6 +2,8 @@
 #include "octave/parse.h"
 #include <vector>
 #include <chrono>
+#include <cstdio>
+#include <limits>
 
 #define PCG(inputList) \
     (octave::feval("pcg", inputList));
@@ -31,7 +33,7 @@ DEFUN_DLD(non_stationary_methods, args, nargout, "Non stationary methods test")
 
     double tolerances[] = {0.0001, 0.00001, 0.000001, 0.0000001};
     int maxIterationsVec[] = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
-    int ksGmres[] = {10, 20, 30, 40, 50, 100, 150, 200};
+    int ksGmres[] = {2, 3, 5, 10, 20, 30, 40, 50, 100, 150, 200};
 
     std::vector<ConjGradIn> conjGrad;
     std::vector<GMRESIn> gmresIns;
@@ -49,7 +51,7 @@ DEFUN_DLD(non_stationary_methods, args, nargout, "Non stationary methods test")
 
             conjGrad.push_back(cIn);
 
-            for (int k = 0; k < 8; ++k)
+            for (int k = 0; k < 11; ++k)
             {
                 int kIn = ksGmres[k];
 
@@ -66,6 +68,7 @@ DEFUN_DLD(non_stationary_methods, args, nargout, "Non stationary methods test")
     ConjGradIn bestCGIn;
     int bestTimeCG_ms;
     octave_value_list bestCGOut;
+    double bestResCG = std::numeric_limits<double>::max();
     for (ConjGradIn c : conjGrad)
     {
         octave_value_list inputList;
@@ -81,13 +84,29 @@ DEFUN_DLD(non_stationary_methods, args, nargout, "Non stationary methods test")
         outputList = PCG(inputList);
         auto end = std::chrono::high_resolution_clock::now();
 
+        ColumnVector x = outputList(0).column_vector_value();
+        int flag = outputList(1).int_value();
+        double relres = outputList(2).double_value();
+        ColumnVector iter = outputList(3).column_vector_value();
+        ColumnVector resvec = outputList(4).column_vector_value();
+        ColumnVector eigest = outputList(5).column_vector_value();
+
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
         timeMS = duration.count();
+
+        if (relres < bestResCG)
+        {
+            bestResCG = relres;
+            bestTimeCG_ms = timeMS;
+            bestCGOut = outputList;
+            bestCGIn = c;
+        }
     }
 
     GMRESIn bestGMRESIn;
     int bestTimeGMRES_ms;
     octave_value_list bestGMRESOut;
+    double bestResGMRES = std::numeric_limits<double>::max();
     for (GMRESIn g : gmresIns)
     {
         octave_value_list inputList;
@@ -104,9 +123,25 @@ DEFUN_DLD(non_stationary_methods, args, nargout, "Non stationary methods test")
         outputList = GMRES(inputList);
         auto end = std::chrono::high_resolution_clock::now();
 
+        ColumnVector x = outputList(0).column_vector_value();
+        int flag = outputList(1).int_value();
+        double relres = outputList(2).double_value();
+        ColumnVector iter = outputList(3).column_vector_value();
+        ColumnVector resvec = outputList(4).column_vector_value();
+
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
         timeMS = duration.count();
+
+        if (relres < bestResGMRES)
+        {
+            bestResGMRES = relres;
+            bestTimeGMRES_ms = timeMS;
+            bestGMRESOut = outputList;
+            bestGMRESIn = g;
+        }
     }
+
+
 
     return result;
 }
