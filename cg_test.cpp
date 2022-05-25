@@ -4,15 +4,37 @@
 #include <chrono>
 #include <cstdio>
 #include <limits>
-
-#define PCG(inputList) \
-    (octave::feval("pcg", inputList));
+#include <thread>
 
 typedef struct conjGradIn
 {
     double tol;
     int nMaxIter;
 } ConjGradIn;
+
+void pcg(Matrix A, ColumnVector b, ConjGradIn c, octave_value_list &result)
+{
+    octave_value_list inputList;
+    octave_value_list outputList;
+
+    inputList(0) = A;
+    inputList(1) = b;
+    inputList(2) = c.tol;
+    inputList(3) = c.nMaxIter;
+
+    auto start = std::chrono::high_resolution_clock::now();
+    outputList = (octave::feval("pcg", inputList));
+    auto end = std::chrono::high_resolution_clock::now();
+
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+
+    result(0) = duration.count();
+    result(1) = outputList(0);
+    result(2) = outputList(1);
+    result(3) = outputList(2);
+    result(4) = outputList(3);
+    result(5) = outputList(4);
+}
 
 DEFUN_DLD(cg_test, args, nargout, "Experience with conjugated gradients method")
 {
@@ -41,6 +63,9 @@ DEFUN_DLD(cg_test, args, nargout, "Experience with conjugated gradients method")
         }
     }
 
+    int threadCount = std::thread::hardware_concurrency();
+    int usedThreads = 0;
+    std::vector<std::thread*> threads;
     ConjGradIn bestCGIn;
     int bestTimeCG_ms;
     octave_value_list bestCGOut;
@@ -51,21 +76,27 @@ DEFUN_DLD(cg_test, args, nargout, "Experience with conjugated gradients method")
         octave_value_list outputList;
         int timeMS;
 
-        inputList(0) = A;
-        inputList(1) = b;
-        inputList(2) = c.tol;
-        inputList(3) = c.nMaxIter;
+        if (usedThreads < threadCount)
+        {
+            std::thread* t = new std::thread(pcg, A, b, c, outputList);
+            threads.push_back(t);
+            ++usedThreads;
+        }
+        else
+        {
+            for (std::thread* t : threads)
+            {
+                t->join();
+            }
+            usedThreads = 0;
+        }
 
-        auto start = std::chrono::high_resolution_clock::now();
-        outputList = PCG(inputList);
-        auto end = std::chrono::high_resolution_clock::now();
-
-        ColumnVector x = outputList(0).column_vector_value();
-        int flag = outputList(1).int_value();
-        double relres = outputList(2).double_value();
-        Matrix iter = outputList(3).matrix_value();
-        ColumnVector resvec = outputList(4).column_vector_value();
-        ColumnVector eigest = outputList(5).column_vector_value();
+        timeMS = outputList(0).int_value();
+        ColumnVector x = outputList(1).column_vector_value();
+        int flag = outputList(2).int_value();
+        double relres = outputList(3).double_value();
+        Matrix iter = outputList(4).matrix_value();
+        ColumnVector resvec = outputList(5).column_vector_value();
 
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
         timeMS = duration.count();
@@ -82,11 +113,11 @@ DEFUN_DLD(cg_test, args, nargout, "Experience with conjugated gradients method")
     result(0) = bestCGIn.tol;
     result(1) = bestCGIn.nMaxIter;
     result(2) = (float)bestTimeCG_ms / 1000;
-    result(3) = bestCGOut(0);
-    result(4) = bestCGOut(1);
-    result(5) = bestCGOut(2);
-    result(6) = bestCGOut(3);
-    result(7) = bestCGOut(4);
+    result(3) = bestCGOut(1);
+    result(4) = bestCGOut(2);
+    result(5) = bestCGOut(3);
+    result(6) = bestCGOut(4);
+    result(7) = bestCGOut(5);
 
     return result;
 }
