@@ -5,17 +5,8 @@
 #include <cstdio>
 #include <limits>
 
-#define PCG(inputList) \
-    (octave::feval("pcg", inputList));
-
 #define GMRES(inputList) \
     (octave::feval("gmres", inputList));
-
-typedef struct conjGradIn
-{
-    double tol;
-    int nMaxIter;
-} ConjGradIn;
 
 typedef struct gmresIn
 {
@@ -24,21 +15,20 @@ typedef struct gmresIn
     int k;
 } GMRESIn;
 
-DEFUN_DLD(non_stationary_methods, args, nargout, "Non stationary methods test")
+DEFUN_DLD(gmres_test, args, nargout, "GMRES method test")
 {
     octave_value_list result;
 
     Matrix A = args(0).matrix_value();
     ColumnVector b = args(1).column_vector_value();
 
-    double tolerances[] = {0.0001, 0.00001, 0.000001, 0.0000001};
+    double tolerances[] = {0.000001, 0.0000001, 0.00000001, 0.000000001, 0.0000000001, 0.00000000001};
     int maxIterationsVec[] = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
     int ksGmres[] = {2, 3, 5, 10, 20, 30, 40, 50, 100, 150, 200};
 
-    std::vector<ConjGradIn> conjGrad;
     std::vector<GMRESIn> gmresIns;
 
-    for (int t = 0; t < 4; ++t)
+    for (int t = 0; t < 6; ++t)
     {
         for (int i = 0; i < 10; ++i)
         {
@@ -62,44 +52,6 @@ DEFUN_DLD(non_stationary_methods, args, nargout, "Non stationary methods test")
 
                 gmresIns.push_back(gIn);
             }
-        }
-    }
-
-    ConjGradIn bestCGIn;
-    int bestTimeCG_ms;
-    octave_value_list bestCGOut;
-    double bestResCG = std::numeric_limits<double>::max();
-    for (ConjGradIn c : conjGrad)
-    {
-        octave_value_list inputList;
-        octave_value_list outputList;
-        int timeMS;
-
-        inputList(0) = A;
-        inputList(1) = b;
-        inputList(2) = c.tol;
-        inputList(3) = c.nMaxIter;
-
-        auto start = std::chrono::high_resolution_clock::now();
-        outputList = PCG(inputList);
-        auto end = std::chrono::high_resolution_clock::now();
-
-        ColumnVector x = outputList(0).column_vector_value();
-        int flag = outputList(1).int_value();
-        double relres = outputList(2).double_value();
-        ColumnVector iter = outputList(3).column_vector_value();
-        ColumnVector resvec = outputList(4).column_vector_value();
-        ColumnVector eigest = outputList(5).column_vector_value();
-
-        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-        timeMS = duration.count();
-
-        if (relres < bestResCG)
-        {
-            bestResCG = relres;
-            bestTimeCG_ms = timeMS;
-            bestCGOut = outputList;
-            bestCGIn = c;
         }
     }
 
@@ -141,7 +93,13 @@ DEFUN_DLD(non_stationary_methods, args, nargout, "Non stationary methods test")
         }
     }
 
-
+    result(0) = bestGMRESIn.tol;
+    result(1) = bestGMRESIn.nMaxIter;
+    result(2) = bestGMRESIn.k;
+    result(3) = bestTimeGMRES_ms;
+    result(4) = bestGMRESOut(1);
+    result(5) = bestGMRESOut(3);
+    result(6) = bestGMRESOut(4);
 
     return result;
 }
