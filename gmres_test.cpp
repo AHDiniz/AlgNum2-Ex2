@@ -4,7 +4,9 @@
 #include <chrono>
 #include <cstdio>
 #include <limits>
-#include <thread>
+
+#define GMRES(inputList) \
+    (octave::feval("gmres", inputList));
 
 typedef struct gmresIn
 {
@@ -12,31 +14,6 @@ typedef struct gmresIn
     int nMaxIter;
     int k;
 } GMRESIn;
-
-void gmres(Matrix A, ColumnVector b, GMRESIn g, octave_value_list &result)
-{
-    octave_value_list inputList;
-    octave_value_list outputList;
-
-    inputList(0) = A;
-    inputList(1) = b;
-    inputList(2) = g.tol;
-    inputList(3) = g.nMaxIter;
-    inputList(4) = g.k;
-
-    auto start = std::chrono::high_resolution_clock::now();
-    outputList = (octave::feval("gmres", inputList));
-    auto end = std::chrono::high_resolution_clock::now();
-
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-
-    result(0) = duration.count();
-    result(1) = outputList(0);
-    result(2) = outputList(1);
-    result(3) = outputList(2);
-    result(4) = outputList(3);
-    result(5) = outputList(4);
-}
 
 DEFUN_DLD(gmres_test, args, nargout, "GMRES method test")
 {
@@ -82,20 +59,15 @@ DEFUN_DLD(gmres_test, args, nargout, "GMRES method test")
         octave_value_list outputList;
         int timeMS;
 
-        if (usedThreads < threadCount)
-        {
-            std::thread* t = new std::thread(gmres, A, b, g, outputList);
-            threads.push_back(t);
-            ++usedThreads;
-        }
-        else
-        {
-            for (std::thread* t : threads)
-            {
-                t->join();
-            }
-            usedThreads = 0;
-        }
+        inputList(0) = A;
+        inputList(1) = b;
+        inputList(2) = g.k;
+        inputList(3) = g.tol;
+        inputList(4) = g.nMaxIter;
+
+        auto start = std::chrono::high_resolution_clock::now();
+        outputList = GMRES(inputList);
+        auto end = std::chrono::high_resolution_clock::now();
 
         ColumnVector x = outputList(0).column_vector_value();
         int flag = outputList(1).int_value();
