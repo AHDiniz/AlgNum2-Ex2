@@ -31,7 +31,7 @@ DEFUN_DLD(cg_test, args, nargout, "Experience with conjugated gradients method")
         for (int i = 0; i < 10; ++i)
         {
             double tol = tolerances[t];
-            int nMaxIter = maxIterationsVec[i];
+            int nMaxIter = nMaxIters[i];
 
             ConjGradIn cIn;
             cIn.tol = tol;
@@ -63,7 +63,7 @@ DEFUN_DLD(cg_test, args, nargout, "Experience with conjugated gradients method")
         ColumnVector x = outputList(0).column_vector_value();
         int flag = outputList(1).int_value();
         double relres = outputList(2).double_value();
-        ColumnVector iter = outputList(3).column_vector_value();
+        Matrix iter = outputList(3).matrix_value();
         ColumnVector resvec = outputList(4).column_vector_value();
         ColumnVector eigest = outputList(5).column_vector_value();
 
@@ -82,9 +82,11 @@ DEFUN_DLD(cg_test, args, nargout, "Experience with conjugated gradients method")
     result(0) = bestCGIn.tol;
     result(1) = bestCGIn.nMaxIter;
     result(2) = (float)bestTimeCG_ms / 1000;
-    result(3) = bestCGOut(1);
-    result(4) = bestCGOut(3);
-    result(5) = bestCGOut(4);
+    result(3) = bestCGOut(0);
+    result(4) = bestCGOut(1);
+    result(5) = bestCGOut(2);
+    result(6) = bestCGOut(3);
+    result(7) = bestCGOut(4);
 
     return result;
 }

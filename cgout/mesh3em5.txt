@@ -1,0 +1,5 @@
+Matriz: mesh3em5
+Ordem do sistema = 289
+Não nulos = 1377
+Número de iterações = 19
+Norma do máximo da solução = 0.577350

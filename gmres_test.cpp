@@ -35,12 +35,6 @@ DEFUN_DLD(gmres_test, args, nargout, "GMRES method test")
             double tol = tolerances[t];
             int nMaxIter = maxIterationsVec[i];
 
-            ConjGradIn cIn;
-            cIn.tol = tol;
-            cIn.nMaxIter = nMaxIter;
-
-            conjGrad.push_back(cIn);
-
             for (int k = 0; k < 11; ++k)
             {
                 int kIn = ksGmres[k];
@@ -78,7 +72,7 @@ DEFUN_DLD(gmres_test, args, nargout, "GMRES method test")
         ColumnVector x = outputList(0).column_vector_value();
         int flag = outputList(1).int_value();
         double relres = outputList(2).double_value();
-        ColumnVector iter = outputList(3).column_vector_value();
+        Matrix iter = outputList(3).matrix_value();
         ColumnVector resvec = outputList(4).column_vector_value();
 
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
@@ -97,9 +91,11 @@ DEFUN_DLD(gmres_test, args, nargout, "GMRES method test")
     result(1) = bestGMRESIn.nMaxIter;
     result(2) = bestGMRESIn.k;
     result(3) = bestTimeGMRES_ms;
-    result(4) = bestGMRESOut(1);
-    result(5) = bestGMRESOut(3);
-    result(6) = bestGMRESOut(4);
+    result(4) = bestGMRESOut(0);
+    result(5) = bestGMRESOut(1);
+    result(6) = bestGMRESOut(2);
+    result(7) = bestGMRESOut(3);
+    result(8) = bestGMRESOut(4);
 
     return result;
 }

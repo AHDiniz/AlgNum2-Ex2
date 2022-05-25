@@ -1,0 +1,5 @@
+Matriz: olm100
+Ordem do sistema = 100
+Não nulos = 396
+Número de iterações = 2.80825e-12
+Norma do máximo da solução = 71686.000000
