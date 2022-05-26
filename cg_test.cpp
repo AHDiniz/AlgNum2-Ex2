@@ -53,8 +53,8 @@ DEFUN_DLD(cg_test, args, nargout, "Experience with conjugated gradients method")
 
         inputList(0) = A;
         inputList(1) = b;
-        inputList(2) = c.tol;
-        inputList(3) = c.nMaxIter;
+        inputList(2) = 0.00000000001;
+        inputList(3) = 1000;
 
         auto start = std::chrono::high_resolution_clock::now();
         outputList = PCG(inputList);

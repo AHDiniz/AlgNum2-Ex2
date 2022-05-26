@@ -28,25 +28,16 @@ DEFUN_DLD(gmres_test, args, nargout, "GMRES method test")
 
     std::vector<GMRESIn> gmresIns;
 
-    for (int t = 0; t < 6; ++t)
+    for (int k = 0; k < 11; ++k)
     {
-        for (int i = 0; i < 10; ++i)
-        {
-            double tol = tolerances[t];
-            int nMaxIter = maxIterationsVec[i];
+        int kIn = ksGmres[k];
 
-            for (int k = 0; k < 11; ++k)
-            {
-                int kIn = ksGmres[k];
+        GMRESIn gIn;
+        gIn.k = kIn;
+        gIn.nMaxIter = 1000;
+        gIn.tol = 0.00000000001;
 
-                GMRESIn gIn;
-                gIn.k = kIn;
-                gIn.nMaxIter = nMaxIter;
-                gIn.tol = tol;
-
-                gmresIns.push_back(gIn);
-            }
-        }
+        gmresIns.push_back(gIn);
     }
 
     GMRESIn bestGMRESIn;
