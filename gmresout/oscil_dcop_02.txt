@@ -1,0 +1,5 @@
+Matriz: oscil_dcop_02
+Ordem do sistema = 430
+Não nulos = 1544
+Número de iterações = 0.895764
+Norma do máximo da solução = 7190977.000000

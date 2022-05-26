@@ -1,0 +1,5 @@
+Matriz: plat362
+Ordem do sistema = 362
+Não nulos = 5786
+Número de iterações = 845
+Norma do máximo da solução = 11255738.028419

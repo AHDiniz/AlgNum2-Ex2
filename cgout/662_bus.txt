@@ -1,0 +1,5 @@
+Matriz: 662_bus
+Ordem do sistema = 662
+Não nulos = 2474
+Número de iterações = 795
+Norma do máximo da solução = 205.126580

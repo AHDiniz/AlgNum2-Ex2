@@ -1,0 +1,5 @@
+Matriz: cavity05
+Ordem do sistema = 1182
+Não nulos = 32632
+Número de iterações = 9.68669e-12
+Norma do máximo da solução = 9578375.000000

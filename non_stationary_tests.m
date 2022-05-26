@@ -2,7 +2,7 @@
 
 % matrices_gmres = ["gmresin/olm100.mat", "gmresin/oscil_dcop_02.mat", "gmresin/cavity05.mat", "gmresin/cz2548.mat", "gmresin/coater2.mat", "gmresin/Dubcova1.mat"];
 
-load "cgin/mesh3em5.mat";
+load "cgin/s1rmq4m1.mat";
 A = Problem.A;
 n = rows(A);
 b = ones(n, 1);
@@ -16,8 +16,8 @@ else
     iterations = (iter(1, 1) - 1) * n + iter(2, 1);
 endif
 
-f = fopen("cgout/mesh3em5.txt", "w");
-fprintf(f, "Matriz: mesh3em5\n");
+f = fopen("cgout/s1rmq4m1.txt", "w");
+fprintf(f, "Matriz: s1rmq4m1\n");
 fprintf(f, "Ordem do sistema = %d\n", n);
 fprintf(f, "Não nulos = %d\n", nnz(A));
 fprintf(f, "Número de iterações = %d\n", iterations);
@@ -28,11 +28,11 @@ hf = figure();
 plot(1 : rows(resvec), log(resvec));
 xlabel("Número de iterações");
 ylabel("log(Resíduo Relativo)");
-title("mesh3em5");
-print(hf, "cgout/mesh3em5.png", "-dpng");
+title("s1rmq4m1");
+print(hf, "cgout/s1rmq4m1.svg", "-dsvg");
 
 
-load "gmresin/olm100.mat";
+load "gmresin/cz2548.mat";
 A = Problem.A;
 n = rows(A);
 b = ones(n, 1);
@@ -46,8 +46,8 @@ else
     iterations = (iter(1, 1) - 1) * n + iter(2, 1);
 endif
 
-fg = fopen("gmresout/olm100.txt", "w");
-fprintf(fg, "Matriz: olm100\n");
+fg = fopen("gmresout/cz2548.txt", "w");
+fprintf(fg, "Matriz: cz2548\n");
 fprintf(fg, "Ordem do sistema = %d\n", n);
 fprintf(fg, "Não nulos = %d\n", nnz(A));
 fprintf(fg, "Número de iterações = %d\n", iterations);
@@ -58,5 +58,5 @@ hf = figure();
 plot(1 : rows(resvec), log(resvec));
 xlabel("Número de iterações");
 ylabel("log(Resíduo Relativo)");
-title("olm100");
-print(hf, "gmresout/olm100.png", "-dpng");
+title("cz2548");
+print(hf, "gmresout/cz2548.svg", "-dsvg");

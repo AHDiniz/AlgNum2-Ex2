@@ -1,0 +1,5 @@
+Matriz: s1rmq4m1
+Ordem do sistema = 5489
+Não nulos = 262411
+Número de iterações = 0
+Norma do máximo da solução = 0.000000

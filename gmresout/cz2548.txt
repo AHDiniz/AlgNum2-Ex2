@@ -1,0 +1,5 @@
+Matriz: cz2548
+Ordem do sistema = 2548
+Não nulos = 25674
+Número de iterações = 2.94739e-05
+Norma do máximo da solução = 74718585.000000
