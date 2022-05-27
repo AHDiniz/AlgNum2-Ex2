@@ -1,0 +1,5 @@
+Matriz: bcsstk36
+Ordem do sistema = 23052
+Não nulos = 1143140
+Número de iterações = 0
+Norma do máximo da solução = 0.000000
