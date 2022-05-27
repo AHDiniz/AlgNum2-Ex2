@@ -1,0 +1,5 @@
+Matriz: Dubcova3
+Ordem do sistema = 146689
+Não nulos = 3636643
+Número de iterações = 265
+Norma do máximo da solução = 1210.163586

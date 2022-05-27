@@ -1,0 +1,5 @@
+Matriz: pdb1HYS
+Ordem do sistema = 36417
+Não nulos = 4344765
+Número de iterações = 25
+Norma do máximo da solução = 999885102.593616
