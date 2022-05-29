@@ -1,62 +1,150 @@
-% matrices_cg = ["cgin/mesh3em5.mat", "cgin/plat362.mat", "cgin/662_bus.mat", "cgin/s1rmq4m1.mat", "cgin/bcsstk36.mat"];
+cgins = cell(7, 1);
+cgins_names = cell(7, 1);
 
-% matrices_gmres = ["gmresin/olm100.mat", "gmresin/oscil_dcop_02.mat", "gmresin/cavity05.mat", "gmresin/cz2548.mat", "gmresin/coater2.mat", "gmresin/Dubcova1.mat"];
-
+load "cgin/mesh3em5.mat";
+cgins{1} = Problem.A;
+cgins_names{1} = "mesh3em5";
+load "cgin/plat362.mat";
+cgins{2} = Problem.A;
+cgins_names{1} = "plat362";
+load "cgin/662_bus.mat";
+cgins{3} = Problem.A;
+cgins_names{1} = "662bus";
+load "cgin/s1rmq4m1.mat";
+cgins{4} = Problem.A;
+cgins_names{1} = "s1rmq4m1";
+load "cgin/bcsstk36.mat";
+cgins{5} = Problem.A;
+cgins_names{1} = "bcsstk36";
+load "cgin/pdb1HYS.mat";
+cgins{6} = Problem.A;
+cgins_names{1} = "pdb1HYS";
 load "cgin/Dubcova3.mat";
-A = Problem.A;
-n = rows(A);
-b = ones(n, 1);
+cgins{7} = Problem.A;
+cgins_names{1} = "Dubcova3";
 
-[x, f, relres, iter, resvec] = pcg(A, b, 0.0000000001, 1000);
-iterations = 0;
-[nc, nr] = size(iter);
-if nc == 1 && nr == 1
-    iterations = iter(1, 1);
-else
-    iterations = (iter(1, 1) - 1) * n + iter(2, 1);
-endif
+for i = 1 : 7
+    A = cgins{i};
+    name = cgins_names{i};
+    n = rows(A);
+    b = ones(n, 1);
 
-f = fopen("cgout/Dubcova3.txt", "w");
-fprintf(f, "Matriz: Dubcova3\n");
-fprintf(f, "Ordem do sistema = %d\n", n);
-fprintf(f, "Não nulos = %d\n", nnz(A));
-fprintf(f, "Número de iterações = %d\n", iterations);
-fprintf(f, "Norma do máximo da solução = %f\n", norm(x, inf));
-fclose(f);
+    tic();
+    [x, f, relres, iter, resvec] = pcg(A, b, 0.0000000001, 1000);
+    elapsed = toc();
+    iterations = 0;
+    [nc, nr] = size(iter);
+    if nc == 1 && nr == 1
+        iterations = iter(1, 1);
+    else
+        iterations = (iter(1, 1) - 1) * n + iter(2, 1);
+    endif
 
-hf = figure();
-plot(1 : rows(resvec), log(resvec));
-xlabel("Número de iterações");
-ylabel("log(Resíduo Relativo)");
-title("Dubcova3");
-print(hf, "cgout/Dubcova3.svg", "-dsvg");
+    f = fopen(strcat("cgout/", name, ".txt"), "w");
+    fprintf(f, strcat("Matriz: ", name, "\n"));
+    fprintf(f, "Ordem do sistema = %d\n", n);
+    fprintf(f, "Não nulos = %d\n", nnz(A));
+    fprintf(f, "Número de iterações = %d\n", iterations);
+    fprintf(f, "Norma do máximo da solução = %f\n", norm(x, inf));
+    fprintf(f, "Número de condicionamento = %f\n", cond(A));
+    fprintf(f, "Tempo de execução = %f\n", elapsed);
+    fprintf(f, "Resíduo relativo = %f\n", relres);
+    fprintf(f, "Flag = %d\n", f);
+    fclose(f);
 
+    hf = figure();
+    plot(1 : rows(resvec), log(resvec));
+    xlabel("Número de iterações");
+    ylabel("log(Resíduo Relativo)");
+    title(name);
+    print(hf, strcat("cgout/", name, ".svg"), "-dsvg");
+endfor
 
-% load "gmresin/Dubcova1.mat";
-% A = Problem.A;
-% n = rows(A);
-% b = ones(n, 1);
+gmresins = cell(6, 1);
+gmres_names = cell(6, 1);
 
-% [tol, nMaxIter, execTime, x, f, relres, iter, resvec] = gmres_test(A, b);
-% iterations = 0;
-% [nc, nr] = size(iter);
-% if nc == 1 && nr == 1
-%     iterations = iter(1, 1);
-% else
-%     iterations = (iter(1, 1) - 1) * n + iter(2, 1);
-% endif
+load "gmresin/olm100.mat";
+gmresins{1} = Problem.A;
+gmres_names{1} = "olm100";
+load "gmresin/oscil_dcop_02.mat";
+gmresins{2} = Problem.A;
+gmres_names{2} = "oscil dcop 02";
+load "gmresin/cavity05.mat";
+gmresins{3} = Problem.A;
+gmres_names{3} = "cavity05";
+load "gmresin/cz2548.mat";
+gmresins{4} = Problem.A;
+gmres_names{4} = "cz2548";
+load "gmresin/coater02.mat";
+gmresins{5} = Problem.A;
+gmres_names{5} = "coater02.mat";
+load "gmresin/Dubcova1.mat";
+gmresins{6} = Problem.A;
+gmres_names{6} = "Dubcova1";
 
-% fg = fopen("gmresout/Dubcova1.txt", "w");
-% fprintf(fg, "Matriz: Dubcova1\n");
-% fprintf(fg, "Ordem do sistema = %d\n", n);
-% fprintf(fg, "Não nulos = %d\n", nnz(A));
-% fprintf(fg, "Número de iterações = %d\n", iterations);
-% fprintf(fg, "Norma do máximo da solução = %f\n", norm(x, inf));
-% fclose(fg);
+for i = 1 : 6
+    A = gmresins{i};
+    name = gmres_names{i};
+    n = rows(A);
+    b = ones(n, 1);
 
-% hf = figure();
-% plot(1 : rows(resvec), log(resvec));
-% xlabel("Número de iterações");
-% ylabel("log(Resíduo Relativo)");
-% title("Dubcova1");
-% print(hf, "gmresout/Dubcova1.svg", "-dsvg");
+    ks = [2, 3, 5, 10, 20, 30, 40, 50, 100, 150, 200];
+    best_k = 0;
+    best_time = 0;
+    best_x = [];
+    best_f = 0;
+    best_relres = inf;
+    best_iter = [];
+    best_resvec = [];
+    
+    if name == "coater02"
+        fg = fopen(strcat("gmresout/", name, ".txt"), "w");
+        fprintf(fg, strcat("Matriz: ", name, "\n"));
+        fprintf(fg, "Ordem do sistema = %d\n", n);
+        fprintf(fg, "Não nulos = %d\n", nnz(A));
+        fprintf(fg, "Número de condicionamento = %f\n", cond(A));
+        fclose(fg);
+    else
+        for i = 1 : 11
+            tic();
+            [x, f, relres, iter, resvec] = gmres(A, b, ks(i), 0.00000000001, 1000);
+            elapsed = toc();
+            if relres < best_relres
+                best_k = ks(i);
+                best_time = elapsed;
+                best_x = x;
+                best_f = f;
+                best_relres = relres;
+                best_iter = iter;
+                best_resvec = resvec;
+            endif
+        endfor
+        iterations = 0;
+        [nc, nr] = size(best_iter);
+        if nc == 1 && nr == 1
+            iterations = best_iter(1, 1);
+        else
+            iterations = (best_iter(1, 1) - 1) * n + best_iter(2, 1);
+        endif
+
+        fg = fopen(strcat("gmresout/", name, ".txt"), "w");
+        fprintf(fg, strcat("Matriz: ", name, "\n"));
+        fprintf(fg, "Ordem do sistema = %d\n", n);
+        fprintf(fg, "Não nulos = %d\n", nnz(A));
+        fprintf(fg, "Número de iterações = %d\n", iterations);
+        fprintf(fg, "Norma do máximo da solução = %f\n", norm(x, inf));
+        fprintf(fg, "Número de condicionamento = %f\n", cond(A));
+        fprintf(fg, "Tempo de execução = %f\n", best_time);
+        fprintf(fg, "Resíduo relativo = %f\n", best_relres);
+        fprintf(fg, "Flag = %d\n", best_f);
+        fprintf(fg, "k = %f\n", best_k);
+        fclose(fg);
+
+        hf = figure();
+        plot(1 : rows(resvec), log(resvec));
+        xlabel("Número de iterações");
+        ylabel("log(Resíduo Relativo)");
+        title(name);
+        print(hf, strcat("gmresout/", name, ".svg"), "-dsvg");
+    endif
+endfor
