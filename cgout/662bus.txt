@@ -1,0 +1,9 @@
+Matriz:662bus
+Ordem do sistema = 662
+Não nulos = 2474
+Número de iterações = 758
+Norma do máximo da solução = 205.126580
+Número de condicionamento = 794131.107853
+Tempo de execução = 0.158082
+Resíduo relativo = 0.000000
+Flag = 28

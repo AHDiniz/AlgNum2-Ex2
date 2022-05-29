@@ -1,0 +1,10 @@
+Matriz:oscildcop02
+Ordem do sistema = 430
+Não nulos = 1544
+Número de iterações = 2350
+Norma do máximo da solução = 14868.549048
+Número de condicionamento = 2091013054574.251465
+Tempo de execução = 5.213507
+Resíduo relativo = 0.896517
+Flag = 3
+k = 200.000000

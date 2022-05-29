@@ -1,5 +1,0 @@
-Matriz: coater2
-Ordem do sistema = 9540
-Não nulos = 207308
-Número de iterações = 0.607927
-Norma do máximo da solução = 1245738867.000000

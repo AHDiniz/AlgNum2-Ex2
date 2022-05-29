@@ -1,0 +1,10 @@
+Matriz:coater02.mat
+Ordem do sistema = 9540
+Não nulos = 207308
+Número de iterações = 9530660
+Norma do máximo da solução = 0.988537
+Número de condicionamento = 3249467495673295648154744254883642212352.000000
+Tempo de execução = 2962.050168
+Resíduo relativo = 0.607929
+Flag = 1
+k = 200.000000

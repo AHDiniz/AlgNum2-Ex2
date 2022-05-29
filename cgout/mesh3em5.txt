@@ -1,5 +1,9 @@
-Matriz: mesh3em5
+Matriz:mesh3em5
 Ordem do sistema = 289
 Não nulos = 1377
 Número de iterações = 19
 Norma do máximo da solução = 0.577350
+Número de condicionamento = 4.965950
+Tempo de execução = 0.006830
+Resíduo relativo = 0.000000
+Flag = 19

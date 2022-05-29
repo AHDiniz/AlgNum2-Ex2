@@ -1,5 +1,9 @@
-Matriz: s1rmq4m1
+Matriz:s1rmq4m1
 Ordem do sistema = 5489
 Não nulos = 262411
 Número de iterações = 0
 Norma do máximo da solução = 0.000000
+Número de condicionamento = 1810479.059664
+Tempo de execução = 1.327104
+Resíduo relativo = 1.000000
+Flag = 28

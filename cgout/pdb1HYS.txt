@@ -1,5 +1,9 @@
-Matriz: pdb1HYS
+Matriz:pdb1HYS
 Ordem do sistema = 36417
 Não nulos = 4344765
 Número de iterações = 25
 Norma do máximo da solução = 999885102.593616
+Número de condicionamento = Inf
+Tempo de execução = 38.405522
+Resíduo relativo = 0.032607
+Flag = 28

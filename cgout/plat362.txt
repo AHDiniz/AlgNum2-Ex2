@@ -1,5 +1,9 @@
-Matriz: plat362
+Matriz:plat362
 Ordem do sistema = 362
 Não nulos = 5786
-Número de iterações = 845
-Norma do máximo da solução = 11255738.028419
+Número de iterações = 919
+Norma do máximo da solução = 12509541.882782
+Número de condicionamento = 217823279695.199707
+Tempo de execução = 0.234880
+Resíduo relativo = 0.125450
+Flag = 28

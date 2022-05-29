@@ -1,5 +1,10 @@
-Matriz: olm100
+Matriz:olm100
 Ordem do sistema = 100
 Não nulos = 396
-Número de iterações = 2.80825e-12
-Norma do máximo da solução = 72032.000000
+Número de iterações = 61
+Norma do máximo da solução = 3.428810
+Número de condicionamento = 15275.167237
+Tempo de execução = 0.030819
+Resíduo relativo = 0.000000
+Flag = 0
+k = 100.000000

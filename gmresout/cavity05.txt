@@ -1,5 +1,10 @@
-Matriz: cavity05
+Matriz:cavity05
 Ordem do sistema = 1182
 Não nulos = 32632
-Número de iterações = 9.68669e-12
-Norma do máximo da solução = 9578375.000000
+Número de iterações = 8389
+Norma do máximo da solução = 44762.888763
+Número de condicionamento = 577064.801928
+Tempo de execução = 8.544526
+Resíduo relativo = 0.000000
+Flag = 0
+k = 200.000000

@@ -1,5 +1,10 @@
-Matriz: Dubcova1
+Matriz:Dubcova1
 Ordem do sistema = 16129
 Não nulos = 253009
-Número de iterações = 9.46293e-12
-Norma do máximo da solução = 40035337.000000
+Número de iterações = 80651
+Norma do máximo da solução = 304.524372
+Número de condicionamento = 997.119927
+Tempo de execução = 1.662386
+Resíduo relativo = 0.000000
+Flag = 0
+k = 50.000000

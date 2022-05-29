@@ -1,9 +1,9 @@
 Matriz:Dubcova3
-Ordem do sistema = 289
-Não nulos = 1377
-Número de iterações = 19
-Norma do máximo da solução = 0.577350
-Número de condicionamento = 4.965950
-Tempo de execução = 0.132500
+Ordem do sistema = 146689
+Não nulos = 3636643
+Número de iterações = 265
+Norma do máximo da solução = 1210.163586
+Número de condicionamento = Inf
+Tempo de execução = 10.217256
 Resíduo relativo = 0.000000
-Flag = 19
+Flag = 28
